@@ -31,6 +31,3 @@ server
 
 Чтобы исправить это, можно было бы всё на backend сохранять или в какой-то DB.
 
-Вот бот и его токен
-@game_gg_777_bot
-BOT_TOKEN=7658667721:AAGSKvVre3t4LL2XFX-xCpVfdX6KKpTVBW8

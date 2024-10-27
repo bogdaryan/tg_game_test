@@ -1,0 +1,60 @@
+services:
+  front:
+    image: front
+    container_name: front
+    build:
+      context: ./front
+    restart: always
+    ports:
+      - 8080:5173
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+
+  bot:
+    image: bot
+    container_name: bot
+    build:
+      context: ./bot
+    restart: always
+    volumes:
+      - ./bot:/app
+      - /app/node_modules
+    env_file:
+      - ./bot/.env
+    depends_on:
+      - front
+      - postgresql
+
+  backend:
+    image: backend
+    container_name: backend
+    build: ./backend
+    restart: always
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - postgresql
+
+  postgresql:
+    image: postgres
+    container_name: postgres
+    restart: always
+    env_file:
+      - ./backend/.env
+    volumes:
+      - postgres_data:/data/postgres
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+
+volumes:
+  postgres_data:

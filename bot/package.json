@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/app.ts",
-    "dev": "nodemon src/app.ts",
+    "dev": "nodemon --legacy-watch src/app.ts",
     "build": "tsc",
     "lint": "npx eslint src/**/*.ts"
   },
@@ -18,7 +18,9 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.7.7",
     "dotenv": "^16.4.5",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "body-parser": "^1.20.3",

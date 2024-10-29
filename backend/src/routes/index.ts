@@ -28,14 +28,6 @@ const rootRouter = (AppDataSource: DataSource) => {
     }
   });
 
-  router.get('/game-state', async (req: Request, res: Response) => {
-    const gameState = await playerRepository.findOne({
-      where: { tgUserId: req.body.userId },
-    });
-
-    res.send(gameState);
-  });
-
   router.post('/save-game', async (req: Request, res: Response) => {
     try {
       const { userId, gameState } = req.body;
@@ -62,9 +54,7 @@ const rootRouter = (AppDataSource: DataSource) => {
 
       await playerRepository.save(player);
 
-      // await playerRepository.manager
-      //   .getRepository(Collectibles)
-      //   .save(player.collectibles);
+      console.log('good');
 
       res.status(200).send(player);
     } catch (err) {

@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { ControlScene } from './ControlScene';
 import { Player } from '../Elements/Player';
 import { PlatformManager } from '../Elements/PlatformManager';
+import { postSaveGame } from '../../api/api';
 
 type TGameState = {
   posX: number;
@@ -120,16 +121,16 @@ export class GameScene extends Phaser.Scene {
         y: this.player.y,
       },
       bananaCount: this.bananaCount,
-      collectibles: this.collectibles.getChildren().map((collectible) => {
-        const sprite = collectible as Phaser.Physics.Arcade.Sprite;
-        return {
-          x: sprite.x,
-          y: sprite.y,
-        };
-      }),
+      // collectibles: this.collectibles.getChildren().map((collectible) => {
+      //   const sprite = collectible as Phaser.Physics.Arcade.Sprite;
+      //   return {
+      //     x: sprite.x,
+      //     y: sprite.y,
+      //   };
+      // }),
     };
 
-    // postSaveGame(gameState);
+    postSaveGame(gameState);
   }
 
   loadGameState() {

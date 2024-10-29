@@ -50,22 +50,18 @@ const rootRouter = (AppDataSource: DataSource) => {
         return;
       }
 
-      // Обновляем позицию игрока и количество бананов
       player.posX = gameState.playerPos.x;
       player.posY = gameState.playerPos.y;
       player.bananaCount = gameState.bananaCount;
 
-      // Обновляем collectibles
       // player.collectibles = gameState.collectibles.map(
       //   (collectible: { x: number; y: number }) => {
       //     return { x: collectible.x, y: collectible.y, player: player };
       //   }
       // );
 
-      // Сохраняем обновленное состояние
       await playerRepository.save(player);
 
-      // Если collectibles нужно сохранить отдельно, то можно использовать метод save:
       // await playerRepository.manager
       //   .getRepository(Collectibles)
       //   .save(player.collectibles);

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-// import { useTelegram } from '../../hooks/useTelegram';
 import styles from './app.module.css';
 import config from '../../PhaserGame';
 
@@ -11,7 +10,6 @@ function App() {
       game.destroy(true);
     };
   }, []);
-
   return (
     <>
       <div id="phaser-container" className={styles.app}></div>

@@ -3,6 +3,13 @@ import { ControlScene } from './ControlScene';
 import { Player } from '../Elements/Player';
 import { PlatformManager } from '../Elements/PlatformManager';
 
+type TGameState = {
+  posX: number;
+  posY: number;
+  bananaCount: number;
+  collectibles: { x: number; y: number }[];
+};
+
 export class GameScene extends Phaser.Scene {
   private player!: Player;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -23,7 +30,11 @@ export class GameScene extends Phaser.Scene {
   preload() {}
 
   create() {
+    this.add
+      .tileSprite(0, 0, window.innerWidth, window.innerHeight, 'background')
+      .setOrigin(0, 0);
     this.player = new Player(this, 100, this.cameras.main.height - 50);
+
     this.platformManager = new PlatformManager(this);
 
     this.platformManager.generatePlatforms();
@@ -70,6 +81,10 @@ export class GameScene extends Phaser.Scene {
     this.scene.launch('control');
     this.controlScene = this.scene.get('control') as ControlScene;
 
+    window.addEventListener('beforeunload', () => {
+      this.saveGameState();
+    });
+
     this.loadGameState();
   }
 
@@ -100,7 +115,7 @@ export class GameScene extends Phaser.Scene {
 
   saveGameState() {
     const gameState = {
-      playerPosition: {
+      playerPos: {
         x: this.player.x,
         y: this.player.y,
       },
@@ -114,24 +129,24 @@ export class GameScene extends Phaser.Scene {
       }),
     };
 
-    localStorage.setItem('gameState', JSON.stringify(gameState));
+    // postSaveGame(gameState);
   }
 
   loadGameState() {
-    const gameStateJSON = localStorage.getItem('gameState');
-    if (gameStateJSON) {
-      const gameState = JSON.parse(gameStateJSON);
+    const gameState: TGameState = JSON.parse(
+      sessionStorage.getItem('gameState')!
+    );
 
-      this.player.setPosition(
-        gameState.playerPosition.x,
-        gameState.playerPosition.y
-      );
+    if (gameState) {
+      this.player.setPosition(gameState.posX, gameState.posY);
+
       this.bananaCount = gameState.bananaCount;
-
       this.bananaCountText.setText(`Bananas: ${this.bananaCount}`);
 
-      (gameState.collectibles as { x: number; y: number }[]).forEach(
-        (collectibleData) => {
+      const collectibles = gameState.collectibles;
+
+      if (collectibles) {
+        collectibles.forEach((collectibleData) => {
           const collectible = this.collectibles.create(
             collectibleData.x,
             collectibleData.y,
@@ -140,8 +155,8 @@ export class GameScene extends Phaser.Scene {
           collectible.setScale(0.024);
           collectible.setCollideWorldBounds(true);
           collectible.setGravityY(0);
-        }
-      );
+        });
+      }
     }
 
     this.physics.add.collider(

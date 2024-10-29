@@ -3,22 +3,23 @@ import express from 'express';
 import rootRouter from './routes';
 import helmet from 'helmet';
 import AppDataSource from '../ormconfig';
-
-const app = express();
-
-app.use(helmet());
-app.use(express.json());
+import cors from 'cors';
 
 AppDataSource.initialize()
   .then(() => {
-    console.log('Database cocnneted!');
-
-    app.use(rootRouter(AppDataSource));
-
-    const PORT = process.env.PORT || 3000;
-
-    app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
-    });
+    console.log('Data Source has been initialized!');
   })
-  .catch((error: any) => console.log(error));
+  .catch((err) => {
+    console.error('Error during Data Source initialization:', err);
+  });
+3;
+
+const app = express();
+
+app.use(cors());
+app.use(helmet());
+app.use(express.json());
+
+app.use(rootRouter(AppDataSource));
+
+app.listen(process.env.PORT || 3002);
